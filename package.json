@@ -1,0 +1,15 @@
+{
+  "name": "facial_recognition",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "http-server"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "http-server": "^0.10.0"
+  }
+}
