@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>tracking.js - first tracking</title>
+  <style>
+    .container {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    .video {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    .overlay {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 400px;
+      height: 300px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <video id="myVideo" class="video" width="400" height="300" preload autoplay loop muted></video>
+    <canvas id="myOverlay" class="overlay" width="800" height="600"></canvas>
+  </div>
+  <script src="js/bundle.js"></script>
+</body>
+</html>
