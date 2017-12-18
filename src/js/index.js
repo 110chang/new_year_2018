@@ -24,14 +24,34 @@ window.URL = window.URL || window.webkitURL;
   ctx.lineWidth = 1;
 
   const video = document.getElementById('myVideo');
-  navigator.getUserMedia(
-    {
-      video: true,
-      audio: false
-    },
-    stream => video.src = window.URL.createObjectURL(stream),
-    err => console.warn(err)
-  );
+  let track;
+
+  const playCamera = () => {
+    navigator.getUserMedia(
+      {
+        video: true,
+        audio: false
+      },
+      stream => {
+        video.src = window.URL.createObjectURL(stream);
+        track = stream.getTracks()[0]
+      },
+      err => console.warn(err)
+    );
+  }
+  playCamera();
+
+  const play = document.getElementById('btn-play');
+  play.addEventListener('click', e => {
+    console.log('play');
+    playCamera();
+  });
+
+  const stop = document.getElementById('btn-stop');
+  stop.addEventListener('click', e => {
+    console.log('stop');
+    track.stop();
+  });
 
   const objects = new tracking.ObjectTracker(['face']);
 
