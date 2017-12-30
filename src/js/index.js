@@ -34,9 +34,10 @@ window.URL = window.URL || window.webkitURL;
         audio: false
       }
     ).then(stream => { // success
-      localStream = stream;
-      video.src = window.URL.createObjectURL(localStream);
-      track = localStream.getTracks()[0]
+      // localStream = stream;
+      // video.src = window.URL.createObjectURL(stream);
+      video.srcObject = stream;
+      track = stream.getTracks()[0];
     }).catch(error => { // error
       console.error('mediaDevice.getUserMedia() error:', error);
       return;
