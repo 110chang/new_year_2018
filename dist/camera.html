@@ -4,23 +4,20 @@
     <title>Self  Camera</title>
   </head>
   <body>
-      <!-- https://html5experts.jp/mganeko/5098/ -->
-      <video  id="myVideo"  width="400"  height="300"  autoplay muted playsinline  ></video>
-
-      <script  type="text/javascript">
-
-        var  video  =  document.getElementById('myVideo');
-        var  localStream  =  null;
-        navigator.mediaDevices.getUserMedia({
-          video:  true,
-          audio:  false
-        }).then(stream => { // success
-          console.log(stream);
-          video.srcObject = stream;
-        }).catch(err => { // error
-          console.log(err);
-          return;
-        });
-      </script>
+    <!-- https://html5experts.jp/mganeko/5098/ -->
+    <video id="myVideo" width="400" height="300" autoplay muted playsinline></video>
+    <script type="text/javascript">
+      var video = document.getElementById('myVideo');
+      navigator.mediaDevices.getUserMedia({
+        "video": true,
+        "audio": false
+      }).then(function (stream) { // success
+        console.log(stream);
+        video.srcObject = stream;
+      }).catch(function (err) { // error
+        console.log(err);
+        return;
+      });
+    </script>
   </body>
 </html>
