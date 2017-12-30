@@ -11,15 +11,16 @@
 
         var  video  =  document.getElementById('myVideo');
         var  localStream  =  null;
-        navigator.mediaDevices.getUserMedia({video:  true,  audio:  false},
-          function(stream)  {  //  for  success  case
-            console.log(stream);
-            video.srcObject = stream;
-          },
-          function(err)  {  //  for  error  case
-            console.log(err);
-          }
-        );
+        navigator.mediaDevices.getUserMedia({
+          video:  true,
+          audio:  false
+        }).then(stream => { // success
+          console.log(stream);
+          video.srcObject = stream;
+        }).catch(error => { // error
+          console.log(err);
+          return;
+        });
       </script>
   </body>
 </html>
