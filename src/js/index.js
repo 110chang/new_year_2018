@@ -33,7 +33,8 @@ window.URL = window.URL || window.webkitURL;
         audio: false
       },
       stream => {
-        video.srcObject = stream;
+        // video.srcObject = stream;
+        video.setAttribute("playsinline", true);
         video.src = window.URL.createObjectURL(stream);
         track = stream.getTracks()[0]
       },
