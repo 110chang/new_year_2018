@@ -26,16 +26,11 @@ window.URL = window.URL || window.webkitURL;
   let track;
 
   const playCamera = () => {
-    console.log('play', navigator.mediaDevices.getSupportedConstraints());
-
-    navigator.mediaDevices.getUserMedia(
-      {
-        video: { facingMode: 'user' },
-        audio: false
-      }
-    ).then(stream => { // success
-      // localStream = stream;
-      // video.src = window.URL.createObjectURL(stream);
+    console.log('play cam');
+    navigator.mediaDevices.getUserMedia({
+      'video': { facingMode: 'user' },
+      'audio': false
+    }).then(stream => { // success
       video.srcObject = stream;
       track = stream.getTracks()[0];
     }).catch(error => { // error
