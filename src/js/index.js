@@ -28,7 +28,7 @@ window.URL = window.URL || window.webkitURL;
   const playCamera = () => {
     navigator.mediaDevices.getUserMedia(
       {
-        video: true,
+        video: { width: 800, height: 600 },
         audio: false
       }
     ).then(stream => { // success
