@@ -17,7 +17,7 @@
         }).then(stream => { // success
           console.log(stream);
           video.srcObject = stream;
-        }).catch(error => { // error
+        }).catch(err => { // error
           console.log(err);
           return;
         });
