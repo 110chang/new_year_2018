@@ -9,12 +9,12 @@
     <script type="text/javascript">
       var video = document.getElementById('myVideo');
       navigator.mediaDevices.getUserMedia({
-        "video": true,
+        "video": { facingMode: 'user' },
         "audio": false
-      }).then(function (stream) { // success
+      }).then(function(stream) { // success
         console.log(stream);
         video.srcObject = stream;
-      }).catch(function (err) { // error
+      }).catch(function(err) { // error
         console.log(err);
         return;
       });
