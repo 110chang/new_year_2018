@@ -8,9 +8,11 @@
     <video id="myVideo" width="400" height="300" autoplay muted playsinline></video>
     <script type="text/javascript">
       var video = document.getElementById('myVideo');
+      // Use new api `mediaDevices.getUserMedia`
+      // https://developer.mozilla.org/ja/docs/Web/API/MediaDevices
       navigator.mediaDevices.getUserMedia({
-        "video": { facingMode: 'user' },
-        "audio": false
+        video: { facingMode: 'user' }, // Use object, not boolean
+        audio: false
       }).then(function(stream) { // success
         console.log(stream);
         video.srcObject = stream;
