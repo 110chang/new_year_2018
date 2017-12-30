@@ -2,8 +2,6 @@
 import './tracking-min';
 import './face-min';
 
-const mediaDevices = navigator.mediaDevices;
-const getUserMedia = mediaDevices ? mediaDevices.getUserMedia : navigator.getUserMedia;
 window.URL = window.URL || window.webkitURL;
 
 !function() {
@@ -28,7 +26,7 @@ window.URL = window.URL || window.webkitURL;
   let track;
 
   const playCamera = () => {
-    getUserMedia(
+    navigator.mediaDevices.getUserMedia(
       {
         video: true,
         audio: false
