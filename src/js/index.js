@@ -2,7 +2,8 @@
 import './tracking-min';
 import './face-min';
 
-navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || window.navigator.mozGetUserMedia;
+const mediaDevices = navigator.mediaDevices;
+const getUserMedia = mediaDevices ? mediaDevices.getUserMedia : navigator.getUserMedia;
 window.URL = window.URL || window.webkitURL;
 
 !function() {
@@ -27,19 +28,19 @@ window.URL = window.URL || window.webkitURL;
   let track;
 
   const playCamera = () => {
-    navigator.getUserMedia(
+    getUserMedia(
       {
         video: true,
         audio: false
-      },
-      stream => {
-        // video.srcObject = stream;
-        video.setAttribute("playsinline", true);
-        video.src = window.URL.createObjectURL(stream);
-        track = stream.getTracks()[0]
-      },
-      err => console.warn(err)
-    );
+      }
+    ).then(stream => { // success
+      localStream = stream;
+      localVideo.src = window.URL.createObjectURL(localStream);
+      track = localStream.getTracks()[0]
+    }).catch(error => { // error
+      console.error('mediaDevice.getUserMedia() error:', error);
+      return;
+    });
   }
   playCamera();
 
