@@ -6,13 +6,16 @@ window.URL = window.URL || window.webkitURL;
 
 !function() {
 
+  const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
+  console.log(screenWidth, screenHeight);
   let img = new Image();
   img.src = '../img/Laughing_man.png';
 
   let imgWidth, imgHeight;
 
   img.onload = () => {
-    console.log(img.width, img.height);
+    //console.log(img.width, img.height);
     imgWidth = img.width;
     imgHeight = img.height;
   }
