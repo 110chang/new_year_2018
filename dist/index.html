@@ -12,34 +12,36 @@
   <style>
     .placeholder {
       position: relative;
-      width: 400px;
-      height: 300px;
+      width: 100vw;
+      height: 100vh;
     }
     .video {
       position: absolute;
       left: 0;
       top: 0;
+      width: 100%;
+      height: auto;
     }
     .overlay {
       position: absolute;
       left: 0;
       top: 0;
-      width: 400px;
-      height: 300px;
+      width: 100vw;
+      height: 100vh;
+    }
+    .control {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100vw;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="row justify-content-center my-3">
-      <div class="col col-auto">
-        <div class="placeholder">
-          <video id="myVideo" class="video" width="400" height="300" autoplay muted playsinline></video>
-          <canvas id="myOverlay" class="overlay" width="800" height="600"></canvas>
-        </div>
-      </div>
-    </div>
-    <div class="row justify-content-center my-3">
+  <div class="placeholder">
+    <video id="myVideo" class="video" autoplay muted playsinline></video>
+    <canvas id="myOverlay" class="overlay"></canvas>
+    <div class="control justify-content-center my-3">
       <div class="col col-auto">
         <button id="btn-play" class="btn btn-danger">
           <i class="fa fa-play"></i>

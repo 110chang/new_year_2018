@@ -8,7 +8,8 @@ window.URL = window.URL || window.webkitURL;
 
   const screenWidth = window.innerWidth;
   const screenHeight = window.innerHeight;
-  console.log(screenWidth, screenHeight);
+  const devicePixelRatio = window.devicePixelRatio;
+  console.log(screenWidth, screenHeight, devicePixelRatio);
   let img = new Image();
   img.src = '../img/Laughing_man.png';
 
@@ -16,23 +17,27 @@ window.URL = window.URL || window.webkitURL;
 
   img.onload = () => {
     //console.log(img.width, img.height);
-    imgWidth = img.width;
-    imgHeight = img.height;
+    imgWidth = img.width * devicePixelRatio;
+    imgHeight = img.height * devicePixelRatio;
   }
 
   const canvas = document.getElementById('myOverlay');
+  canvas.setAttribute('width', screenWidth * devicePixelRatio);
+  canvas.setAttribute('height', screenHeight * devicePixelRatio);
   const ctx = canvas.getContext('2d');
   ctx.strokeStyle = '#0F0';
   ctx.lineWidth = 1;
 
   const video = document.getElementById('myVideo');
+  video.setAttribute('width', screenWidth);
+  video.setAttribute('height', screenHeight);
   let track;
 
   const playCamera = () => {
     console.log('play cam');
     navigator.mediaDevices.getUserMedia({
-      'video': { facingMode: 'user' },
-      'audio': false
+      video: { facingMode: 'user' },
+      audio: false
     }).then(stream => { // success
       video.srcObject = stream;
       track = stream.getTracks()[0];
@@ -59,13 +64,14 @@ window.URL = window.URL || window.webkitURL;
 
   objects.on('track', e => {
     // console.log(e)
-    ctx.clearRect(0, 0, 800, 600);
+    ctx.clearRect(0, 0, screenWidth * devicePixelRatio, screenHeight * devicePixelRatio);
 
     if (e.data.length === 0) {
       // No objects were detected in this frame.
     } else {
       e.data.forEach(rect => {
         let width, height;
+        // console.log(rect);
         if (rect.width > rect.height) {
           width = rect.width;
           height = rect.width * imgHeight / imgWidth;
