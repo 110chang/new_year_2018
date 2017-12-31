@@ -8,37 +8,48 @@ window.URL = window.URL || window.webkitURL;
 
   const DPR = window.devicePixelRatio;
 
-  let contentWidth = window.innerWidth;
-  let contentHeight = window.innerHeight;
-
-  let img = new Image();
-  img.src = '../img/Laughing_man.png';
-
-  let imgWidth, imgHeight;
-
-  img.onload = () => {
-    imgWidth = img.width * DPR;
-    imgHeight = img.height * DPR;
-  };
-
+  const img = new Image();
   const canvas = document.getElementById('myOverlay');
   const ctx = canvas.getContext('2d');
-
   const video = document.getElementById('myVideo');
-  video.onloadedmetadata = e => {
-    // Do something with the video here.
-    console.log(e.srcElement.offsetHeight);
-    contentWidth = e.srcElement.offsetWidth;
-    contentHeight = e.srcElement.offsetHeight;
+  const play = document.getElementById('btn-play');
+  const stop = document.getElementById('btn-stop');
+  const tracker = new tracking.ObjectTracker(['face']);
+
+  let contentWidth = window.innerWidth;
+  let contentHeight = window.innerHeight;
+  let track;
+
+  function initialize() {
+    img.src = '../img/Laughing_man.png';
+    img.onload = handleImageLoaded;
+    video.onloadedmetadata = handleVideoMetadataLoaded;
+  }
+
+  function handleImageLoaded(e) {
+    initializeCamera();
+  }
+
+  function setContentDimension(video) {
+    contentWidth = video.offsetWidth;
+    contentHeight = video.offsetHeight;
+  }
+
+  function initializeCanvas() {
     canvas.setAttribute('width', contentWidth * DPR);
     canvas.setAttribute('height', contentHeight * DPR);
     ctx.strokeStyle = '#0F0';
     ctx.lineWidth = 1;
-  };
-  let track;
+  }
 
-  const playCamera = () => {
-    console.log('play cam');
+  function handleVideoMetadataLoaded(e) {
+    console.log(e.srcElement);
+    setContentDimension(e.srcElement);
+    initializeCanvas();
+  }
+
+  function initializeCamera() {
+    console.log('init cam');
     navigator.mediaDevices.getUserMedia({
       video: { facingMode: 'user' },
       audio: false
@@ -50,24 +61,18 @@ window.URL = window.URL || window.webkitURL;
       return;
     });
   }
-  playCamera();
 
-
-  const play = document.getElementById('btn-play');
   play.addEventListener('click', e => {
     console.log('play');
-    playCamera();
+    initializeCamera();
   });
 
-  const stop = document.getElementById('btn-stop');
   stop.addEventListener('click', e => {
     console.log('stop');
     track.stop();
   });
 
-  const objects = new tracking.ObjectTracker(['face']);
-
-  objects.on('track', e => {
+  tracker.on('track', e => {
 
     ctx.clearRect(0, 0, contentWidth * DPR, contentHeight * DPR);
 
@@ -80,18 +85,21 @@ window.URL = window.URL || window.webkitURL;
         console.log(rect);
         if (rect.width > rect.height) {
           width = rect.width;
-          height = rect.width * imgHeight / imgWidth;
+          height = rect.width * img.height / img.width;
         } else {
-          width = rect.height * imgWidth / imgHeight;
+          width = rect.height * img.width / img.height;
           height = rect.height;
         }
         ctx.beginPath();
-        ctx.strokeRect(rect.x * DPR, rect.y * DPR, rect.width * DPR, rect.height * DPR);
-        // ctx.drawImage(img, rect.x * 1, rect.y * 1, width * 1, height * 1);
+        // ctx.strokeRect(rect.x * DPR, rect.y * DPR, rect.width * DPR, rect.height * DPR);
+        ctx.drawImage(img, rect.x * DPR, rect.y * DPR, width * DPR, height * DPR);
       });
     }
   });
 
-  tracking.track('#myVideo', objects);
+  initialize();
+
+
+  tracking.track('#myVideo', tracker);
 
 }();
