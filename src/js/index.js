@@ -6,31 +6,35 @@ window.URL = window.URL || window.webkitURL;
 
 !function() {
 
-  const screenWidth = window.innerWidth;
-  const screenHeight = window.innerHeight;
-  const devicePixelRatio = window.devicePixelRatio;
-  console.log(screenWidth, screenHeight, devicePixelRatio);
+  const DPR = window.devicePixelRatio;
+
+  let contentWidth = window.innerWidth;
+  let contentHeight = window.innerHeight;
+
   let img = new Image();
   img.src = '../img/Laughing_man.png';
 
   let imgWidth, imgHeight;
 
   img.onload = () => {
-    //console.log(img.width, img.height);
-    imgWidth = img.width * devicePixelRatio;
-    imgHeight = img.height * devicePixelRatio;
-  }
+    imgWidth = img.width * DPR;
+    imgHeight = img.height * DPR;
+  };
 
   const canvas = document.getElementById('myOverlay');
-  canvas.setAttribute('width', screenWidth * devicePixelRatio);
-  canvas.setAttribute('height', screenHeight * devicePixelRatio);
   const ctx = canvas.getContext('2d');
-  ctx.strokeStyle = '#0F0';
-  ctx.lineWidth = 1;
 
   const video = document.getElementById('myVideo');
-  video.setAttribute('width', screenWidth);
-  video.setAttribute('height', screenHeight);
+  video.onloadedmetadata = e => {
+    // Do something with the video here.
+    console.log(e.srcElement.offsetHeight);
+    contentWidth = e.srcElement.offsetWidth;
+    contentHeight = e.srcElement.offsetHeight;
+    canvas.setAttribute('width', contentWidth * DPR);
+    canvas.setAttribute('height', contentHeight * DPR);
+    ctx.strokeStyle = '#0F0';
+    ctx.lineWidth = 1;
+  };
   let track;
 
   const playCamera = () => {
@@ -48,6 +52,7 @@ window.URL = window.URL || window.webkitURL;
   }
   playCamera();
 
+
   const play = document.getElementById('btn-play');
   play.addEventListener('click', e => {
     console.log('play');
@@ -63,15 +68,16 @@ window.URL = window.URL || window.webkitURL;
   const objects = new tracking.ObjectTracker(['face']);
 
   objects.on('track', e => {
-    // console.log(e)
-    ctx.clearRect(0, 0, screenWidth * devicePixelRatio, screenHeight * devicePixelRatio);
+
+    ctx.clearRect(0, 0, contentWidth * DPR, contentHeight * DPR);
 
     if (e.data.length === 0) {
       // No objects were detected in this frame.
     } else {
+      console.log('detected', ctx.canvas.clientWidth, ctx.canvas.clientHeight);
       e.data.forEach(rect => {
         let width, height;
-        // console.log(rect);
+        console.log(rect);
         if (rect.width > rect.height) {
           width = rect.width;
           height = rect.width * imgHeight / imgWidth;
@@ -80,8 +86,8 @@ window.URL = window.URL || window.webkitURL;
           height = rect.height;
         }
         ctx.beginPath();
-        ctx.strokeRect(rect.x * 2, rect.y * 2, rect.width * 2, rect.height * 2);
-        ctx.drawImage(img, rect.x * 2, rect.y * 2, width * 2, height * 2);
+        ctx.strokeRect(rect.x * DPR, rect.y * DPR, rect.width * DPR, rect.height * DPR);
+        // ctx.drawImage(img, rect.x * 1, rect.y * 1, width * 1, height * 1);
       });
     }
   });
