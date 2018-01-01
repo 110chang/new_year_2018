@@ -51,6 +51,11 @@ import './face-min';
 
   function initializeCamera() {
     console.log('init cam');
+    navigator.mediaDevices.enumerateDevices().then(devices => {
+      const cameras = devices.filter(device => device.kind === 'videoinput');
+      console.log(cameras);
+    });
+
     navigator.mediaDevices.getUserMedia({
       video: { facingMode: 'user' },
       audio: false
