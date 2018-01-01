@@ -57,7 +57,7 @@ import './face-min';
     console.log('init cam');
     navigator.mediaDevices.enumerateDevices().then(devices => {
       console.log(devices);
-      const cameras = devices.filter(device => device.kind === 'videoinput');
+      cameras = devices.filter(device => device.kind === 'videoinput');
       console.log(cameras);
       updateInterface();
     });
