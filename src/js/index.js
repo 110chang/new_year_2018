@@ -6,15 +6,15 @@ import './face-min';
 
   const DPR = window.devicePixelRatio;
   const MAX_COUNT = 10;
-  const cams = ['user', 'environment'];
+  const faces = ['user', 'environment'];
 
   const img = new Image();
   const canvas = document.getElementById('myOverlay');
   const ctx = canvas.getContext('2d');
   const video = document.getElementById('myVideo');
-  const play = document.getElementById('btn-play');
-  const stop = document.getElementById('btn-stop');
-  const camera = document.getElementById('btn-camera');
+  const btnPlay = document.getElementById('btn-play');
+  const btnStop = document.getElementById('btn-stop');
+  const btnCamera = document.getElementById('btn-camera');
   const tracker = new tracking.ObjectTracker(['face']);
 
   let contentWidth = window.innerWidth;
@@ -22,7 +22,8 @@ import './face-min';
   let track;
   let memTrackers = [];
   let untrackCount = 0;
-  let currentFace = cams[0];
+  let currentFace = faces[0];
+  let cameras = []
 
   function initialize() {
     img.src = '../img/Laughing_man.png';
@@ -58,6 +59,7 @@ import './face-min';
       console.log(devices);
       const cameras = devices.filter(device => device.kind === 'videoinput');
       console.log(cameras);
+      updateInterface();
     });
 
     navigator.mediaDevices.getUserMedia({
@@ -66,27 +68,45 @@ import './face-min';
     }).then(stream => { // success
       video.srcObject = stream;
       track = stream.getTracks()[0];
+      updateInterface();
     }).catch(error => { // error
       console.error('mediaDevice.getUserMedia() error:', error);
       return;
     });
   }
 
-  play.addEventListener('click', e => {
+  function updateInterface() {
+    if (track == null) {
+      btnPlay.style = 'display: inline-block';
+      btnStop.style = 'display: none';
+    } else {
+      btnPlay.style = 'display: none';
+      btnStop.style = 'display: inline-block';
+    }
+    if (cameras.length > 1) {
+      btnCamera.style = 'display: inline-block';
+    } else {
+      btnCamera.style = 'display: none';
+    }
+  }
+
+  btnPlay.addEventListener('click', e => {
     console.log('play');
     initializeCamera();
   });
 
-  stop.addEventListener('click', e => {
+  btnStop.addEventListener('click', e => {
     console.log('stop');
     track.stop();
+    track = null;
+    updateInterface();
   });
 
-  camera.addEventListener('click', e => {
-    if (currentFace === cams[0]) {
-      currentFace = cams[1];
+  btnCamera.addEventListener('click', e => {
+    if (currentFace === faces[0]) {
+      currentFace = faces[1];
     } else {
-      currentFace = cams[0];
+      currentFace = faces[0];
     }
     track.stop();
     initializeCamera();
@@ -130,7 +150,13 @@ import './face-min';
     }
   });
 
+  window.onorientationchange = e => {
+    initialize();
+    initializeCamera();
+  }
+
   initialize();
+  updateInterface();
 
   tracking.track('#myVideo', tracker);
 
