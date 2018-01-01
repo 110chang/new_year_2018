@@ -1,4 +1,5 @@
 
+import FileSaver from 'file-saver';
 import './tracking-min';
 import './face-min';
 
@@ -9,21 +10,26 @@ import './face-min';
   const faces = ['user', 'environment'];
 
   const img = new Image();
-  const canvas = document.getElementById('myOverlay');
-  const ctx = canvas.getContext('2d');
+  const overlay = document.getElementById('myOverlay');
+  const overlayCtx = overlay.getContext('2d');
+  const picture = document.createElement('canvas');
+  const pictureCtx = picture.getContext('2d');
   const video = document.getElementById('myVideo');
   const btnPlay = document.getElementById('btn-play');
   const btnStop = document.getElementById('btn-stop');
   const btnCamera = document.getElementById('btn-camera');
+  const btnSave = document.getElementById('btn-save');
   const tracker = new tracking.ObjectTracker(['face']);
 
   let contentWidth = window.innerWidth;
   let contentHeight = window.innerHeight;
   let track;
+  let trackers;
   let memTrackers = [];
+  let savedTrackers = [];
   let untrackCount = 0;
   let currentFace = faces[0];
-  let cameras = []
+  let cameras = [];
 
   function initialize() {
     img.src = '../img/Laughing_man.png';
@@ -41,10 +47,14 @@ import './face-min';
   }
 
   function initializeCanvas() {
-    canvas.setAttribute('width', contentWidth * DPR);
-    canvas.setAttribute('height', contentHeight * DPR);
-    ctx.strokeStyle = '#0F0';
-    ctx.lineWidth = 1;
+    overlay.setAttribute('width', contentWidth * DPR);
+    overlay.setAttribute('height', contentHeight * DPR);
+    overlayCtx.strokeStyle = '#0F0';
+    overlayCtx.lineWidth = 1;
+    picture.setAttribute('width', contentWidth * DPR);
+    picture.setAttribute('height', contentHeight * DPR);
+    pictureCtx.strokeStyle = '#0F0';
+    pictureCtx.lineWidth = 1;
   }
 
   function handleVideoMetadataLoaded(e) {
@@ -110,13 +120,42 @@ import './face-min';
     }
     track.stop();
     initializeCamera();
-  })
+  });
+
+  btnSave.addEventListener('click', e => {
+    savedTrackers = memTrackers.slice();
+    if (savedTrackers.length === 0) {
+      console.warn('No trackers');
+      return;
+    }
+    pictureCtx.clearRect(0, 0, contentWidth * DPR, contentHeight * DPR);
+    pictureCtx.drawImage(video, 0, 0, contentWidth * DPR, contentHeight * DPR);
+    drawMask(pictureCtx, savedTrackers);
+    picture.toBlob(blob => {
+      FileSaver.saveAs(blob, 'laughingman.png');
+    });
+  });
+
+  function drawMask(ctx, trackers) {
+    trackers.forEach(rect => {
+      let width, height;
+      // console.log(rect);
+      if (rect.width > rect.height) {
+        width = rect.width;
+        height = rect.width * img.height / img.width;
+      } else {
+        width = rect.height * img.width / img.height;
+        height = rect.height;
+      }
+      // overlayCtx.beginPath();
+      // ctx.strokeRect(rect.x * DPR, rect.y * DPR, rect.width * DPR, rect.height * DPR);
+      ctx.drawImage(img, rect.x * DPR, rect.y * DPR, width * DPR, height * DPR);
+    });
+  }
 
   tracker.on('track', e => {
-
-    let trackers = e.data;
-
-    ctx.clearRect(0, 0, contentWidth * DPR, contentHeight * DPR);
+    trackers = e.data;
+    overlayCtx.clearRect(0, 0, contentWidth * DPR, contentHeight * DPR);
 
     if (e.data == null || e.data.length === 0) {
       // No objects were detected in this frame.
@@ -132,20 +171,7 @@ import './face-min';
     }
     if (trackers.length > 0) {
       // console.log('detected', ctx.canvas.clientWidth, ctx.canvas.clientHeight);
-      trackers.forEach(rect => {
-        let width, height;
-        // console.log(rect);
-        if (rect.width > rect.height) {
-          width = rect.width;
-          height = rect.width * img.height / img.width;
-        } else {
-          width = rect.height * img.width / img.height;
-          height = rect.height;
-        }
-        ctx.beginPath();
-        // ctx.strokeRect(rect.x * DPR, rect.y * DPR, rect.width * DPR, rect.height * DPR);
-        ctx.drawImage(img, rect.x * DPR, rect.y * DPR, width * DPR, height * DPR);
-      });
+      drawMask(overlayCtx, trackers);
       memTrackers = trackers;
     }
   });
