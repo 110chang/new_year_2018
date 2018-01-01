@@ -61,7 +61,7 @@ import './face-min';
     });
 
     navigator.mediaDevices.getUserMedia({
-      video: { facingMode: cams[1] },
+      video: { facingMode: currentFace },
       audio: false
     }).then(stream => { // success
       video.srcObject = stream;
