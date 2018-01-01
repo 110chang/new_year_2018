@@ -5,6 +5,8 @@ import './face-min';
 !function() {
 
   const DPR = window.devicePixelRatio;
+  const MAX_COUNT = 10;
+  const cams = ['user', 'environment'];
 
   const img = new Image();
   const canvas = document.getElementById('myOverlay');
@@ -12,14 +14,15 @@ import './face-min';
   const video = document.getElementById('myVideo');
   const play = document.getElementById('btn-play');
   const stop = document.getElementById('btn-stop');
+  const camera = document.getElementById('btn-camera');
   const tracker = new tracking.ObjectTracker(['face']);
-  const MAX_COUNT = 10;
 
   let contentWidth = window.innerWidth;
   let contentHeight = window.innerHeight;
   let track;
   let memTrackers = [];
   let untrackCount = 0;
+  let currentFace = cams[0];
 
   function initialize() {
     img.src = '../img/Laughing_man.png';
@@ -52,12 +55,13 @@ import './face-min';
   function initializeCamera() {
     console.log('init cam');
     navigator.mediaDevices.enumerateDevices().then(devices => {
+      console.log(devices);
       const cameras = devices.filter(device => device.kind === 'videoinput');
       console.log(cameras);
     });
 
     navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'user' },
+      video: { facingMode: cams[1] },
       audio: false
     }).then(stream => { // success
       video.srcObject = stream;
@@ -77,6 +81,16 @@ import './face-min';
     console.log('stop');
     track.stop();
   });
+
+  camera.addEventListener('click', e => {
+    if (currentFace === cams[0]) {
+      currentFace = cams[1];
+    } else {
+      currentFace = cams[0];
+    }
+    track.stop();
+    initializeCamera();
+  })
 
   tracker.on('track', e => {
 
