@@ -56,8 +56,8 @@ import './face-min';
   }
 
   function handleVideoMetadataLoaded(e) {
-    // console.log(e.srcElement);
-    setContentDimension(e.srcElement);
+    // console.log(e);
+    setContentDimension(e.srcElement || e.target);
     initializeCanvas();
   }
 
@@ -84,7 +84,7 @@ import './face-min';
     const handleError = error => { // error
       console.error('mediaDevice.getUserMedia() error:', error);
       return;
-    };
+    };//a
 
     try {
       navigator.mediaDevices.getUserMedia(constraints).then(handleStream).catch(handleError);
