@@ -8,7 +8,7 @@ import './face-min';
   const DPR = window.devicePixelRatio;
   const MAX_COUNT = 10;
   const faces = ['user', 'environment'];
-  const masks = [{ src: '../img/inu.png', pad: 0.15 }]
+  const masks = [{ src: '../img/inu.png', pad: 0.15 }];
 
   const img = new Image();
   const overlay = document.getElementById('myOverlay');
@@ -69,18 +69,35 @@ import './face-min';
       // console.log(cameras);
       updateInterface();
     });
+    console.log(navigator.mediaDevices.getUserMedia)
+    try {
 
-    navigator.mediaDevices.getUserMedia({
-      video: { facingMode: currentFace },
-      audio: false
-    }).then(stream => { // success
-      video.srcObject = stream;
-      track = stream.getTracks()[0];
-      updateInterface();
-    }).catch(error => { // error
-      console.error('mediaDevice.getUserMedia() error:', error);
-      return;
-    });
+      navigator.mediaDevices.getUserMedia({
+        video: { facingMode: currentFace },
+        audio: false
+      }).then(stream => { // success
+        video.srcObject = stream;
+        track = stream.getTracks()[0];
+        updateInterface();
+      }).catch(error => { // error
+        console.error('mediaDevice.getUserMedia() error:', error);
+        return;
+      });
+    } catch(e) {
+      navigator.webkitGetUserMedia({
+        video: { facingMode: currentFace },
+        audio: false
+      },
+      stream => { // success
+        video.srcObject = stream;
+        track = stream.getTracks()[0];
+        updateInterface();
+      },
+      error => { // error
+        console.error('mediaDevice.getUserMedia() error:', error);
+        return;
+      });
+    }
   }
 
   function updateInterface() {
