@@ -8,7 +8,7 @@ import './face-min';
   const DPR = window.devicePixelRatio;
   const MAX_COUNT = 10;
   const faces = ['user', 'environment'];
-  const masks = [{ src: '../img/inu.png', pad: 0.2 }]
+  const masks = [{ src: '../img/inu.png', pad: 0.15 }]
 
   const img = new Image();
   const overlay = document.getElementById('myOverlay');
