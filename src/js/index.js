@@ -151,12 +151,12 @@ import './face-min';
       y = rect.y * DPR - height * DPR * currentMask.pad;
       // overlayCtx.beginPath();
       // draw original rect
-      ctx.strokeStyle = '#F00';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(rect.x * DPR, rect.y * DPR, width * DPR, height * DPR);
+      // ctx.strokeStyle = '#F00';
+      // ctx.lineWidth = 1;
+      // ctx.strokeRect(rect.x * DPR, rect.y * DPR, width * DPR, height * DPR);
       // draw modified rect
-      ctx.strokeStyle = '#0F0';
-      ctx.strokeRect(x, y, w, h);
+      // ctx.strokeStyle = '#0F0';
+      // ctx.strokeRect(x, y, w, h);
       ctx.drawImage(img, x, y, w, h);
     });
   }
