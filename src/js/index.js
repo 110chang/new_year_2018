@@ -8,6 +8,7 @@ import './face-min';
   const DPR = window.devicePixelRatio;
   const MAX_COUNT = 10;
   const faces = ['user', 'environment'];
+  const masks = [{ src: '../img/inu.png', pad: 0.1 }]
 
   const img = new Image();
   const overlay = document.getElementById('myOverlay');
@@ -29,10 +30,11 @@ import './face-min';
   let savedTrackers = [];
   let untrackCount = 0;
   let currentFace = faces[0];
+  let currentMask = masks[0];
   let cameras = [];
 
   function initialize() {
-    img.src = '../img/Laughing_man.png';
+    img.src = currentMask.src;
     img.onload = handleImageLoaded;
     video.onloadedmetadata = handleVideoMetadataLoaded;
   }
@@ -49,12 +51,8 @@ import './face-min';
   function initializeCanvas() {
     overlay.setAttribute('width', contentWidth * DPR);
     overlay.setAttribute('height', contentHeight * DPR);
-    overlayCtx.strokeStyle = '#0F0';
-    overlayCtx.lineWidth = 1;
     picture.setAttribute('width', contentWidth * DPR);
     picture.setAttribute('height', contentHeight * DPR);
-    pictureCtx.strokeStyle = '#0F0';
-    pictureCtx.lineWidth = 1;
   }
 
   function handleVideoMetadataLoaded(e) {
@@ -132,13 +130,13 @@ import './face-min';
     pictureCtx.drawImage(video, 0, 0, contentWidth * DPR, contentHeight * DPR);
     drawMask(pictureCtx, savedTrackers);
     picture.toBlob(blob => {
-      FileSaver.saveAs(blob, 'laughingman.png');
+      FileSaver.saveAs(blob, 'inu.png');
     });
   });
 
   function drawMask(ctx, trackers) {
     trackers.forEach(rect => {
-      let width, height;
+      let x, y, w, h, width, height;
       // console.log(rect);
       if (rect.width > rect.height) {
         width = rect.width;
@@ -147,9 +145,19 @@ import './face-min';
         width = rect.height * img.width / img.height;
         height = rect.height;
       }
+      w = width * DPR * (1 + 2 * currentMask.pad);
+      h = height * DPR * (1 + 2 * currentMask.pad);
+      x = rect.x * DPR - width * DPR * currentMask.pad;
+      y = rect.y * DPR - height * DPR * currentMask.pad;
       // overlayCtx.beginPath();
-      // ctx.strokeRect(rect.x * DPR, rect.y * DPR, rect.width * DPR, rect.height * DPR);
-      ctx.drawImage(img, rect.x * DPR, rect.y * DPR, width * DPR, height * DPR);
+      // draw original rect
+      ctx.strokeStyle = '#F00';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(rect.x * DPR, rect.y * DPR, width * DPR, height * DPR);
+      // draw modified rect
+      ctx.strokeStyle = '#0F0';
+      ctx.strokeRect(x, y, w, h);
+      ctx.drawImage(img, x, y, w, h);
     });
   }
 
