@@ -8,7 +8,7 @@ import './face-min';
   const DPR = window.devicePixelRatio;
   const MAX_COUNT = 10;
   const faces = ['user', 'environment'];
-  const masks = [{ src: '../img/inu.png', pad: 0.1 }]
+  const masks = [{ src: '../img/inu.png', pad: 0.2 }]
 
   const img = new Image();
   const overlay = document.getElementById('myOverlay');
@@ -56,7 +56,7 @@ import './face-min';
   }
 
   function handleVideoMetadataLoaded(e) {
-    console.log(e.srcElement);
+    // console.log(e.srcElement);
     setContentDimension(e.srcElement);
     initializeCanvas();
   }
@@ -64,9 +64,9 @@ import './face-min';
   function initializeCamera() {
     console.log('init cam');
     navigator.mediaDevices.enumerateDevices().then(devices => {
-      console.log(devices);
+      // console.log(devices);
       cameras = devices.filter(device => device.kind === 'videoinput');
-      console.log(cameras);
+      // console.log(cameras);
       updateInterface();
     });
 
@@ -123,7 +123,7 @@ import './face-min';
   btnSave.addEventListener('click', e => {
     savedTrackers = memTrackers.slice();
     if (savedTrackers.length === 0) {
-      console.warn('No trackers');
+      console.warn('No tracking result');
       return;
     }
     pictureCtx.clearRect(0, 0, contentWidth * DPR, contentHeight * DPR);
