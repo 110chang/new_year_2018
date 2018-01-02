@@ -69,34 +69,27 @@ import './face-min';
       // console.log(cameras);
       updateInterface();
     });
-    console.log(navigator.mediaDevices.getUserMedia)
-    try {
 
-      navigator.mediaDevices.getUserMedia({
-        video: { facingMode: currentFace },
-        audio: false
-      }).then(stream => { // success
-        video.srcObject = stream;
-        track = stream.getTracks()[0];
-        updateInterface();
-      }).catch(error => { // error
-        console.error('mediaDevice.getUserMedia() error:', error);
-        return;
-      });
+    const constraints = {
+      video: { facingMode: currentFace },
+      audio: false
+    };
+
+    const handleStream = stream => { // success
+      video.srcObject = stream;
+      track = stream.getTracks()[0];
+      updateInterface();
+    };
+
+    const handleError = error => { // error
+      console.error('mediaDevice.getUserMedia() error:', error);
+      return;
+    };
+
+    try {
+      navigator.mediaDevices.getUserMedia(constraints).then(handleStream).catch(handleError);
     } catch(e) {
-      navigator.webkitGetUserMedia({
-        video: { facingMode: currentFace },
-        audio: false
-      },
-      stream => { // success
-        video.srcObject = stream;
-        track = stream.getTracks()[0];
-        updateInterface();
-      },
-      error => { // error
-        console.error('mediaDevice.getUserMedia() error:', error);
-        return;
-      });
+      navigator.webkitGetUserMedia(constraints, handleStream, handleError);
     }
   }
 
