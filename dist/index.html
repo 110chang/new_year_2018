@@ -19,9 +19,6 @@
       height: auto;
     }
     .video {
-      /* position: absolute;
-      left: 0;
-      top: 0; */
       width: 100%;
       height: auto;
     }
@@ -45,25 +42,24 @@
     <video id="myVideo" class="video" autoplay muted playsinline></video>
     <canvas id="myOverlay" class="overlay"></canvas>
   </div>
-  <div class="control justify-content-center my-3">
-    <div class="col col-auto">
-      <button id="btn-play" class="btn btn-danger">
-        <i class="fa fa-play"></i>
-        Start
-      </button>
-      <button id="btn-stop" class="btn btn-dark">
-        <i class="fa fa-stop"></i>
-        Stop
-      </button>
-      <button id="btn-camera" class="btn btn-dark">
-        <i class="fa fa-camera"></i>
-        Camera
-      </button>
-      <button id="btn-save" class="btn btn-dark">
-        <i class="fa fa-download"></i>
-        Save
-      </button>
-    </div>
+  <div class="control p-3 d-flex">
+    <button id="btn-play" class="btn btn-danger">
+      <i class="fa fa-play"></i>
+      Start
+    </button>
+    <button id="btn-stop" class="btn btn-dark">
+      <i class="fa fa-stop"></i>
+      Stop
+    </button>
+    <button id="btn-camera" class="btn btn-dark mx-1">
+      <i class="fa fa-camera"></i>
+      <sup><i class="fa fa-refresh"></i></sup>
+      Camera
+    </button>
+    <button id="btn-save" class="btn btn-success ml-auto mr-0">
+      <i class="fa fa-download"></i>
+      Save
+    </button>
   </div>
   <script src="js/bundle.js"></script>
 </body>
