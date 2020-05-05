@@ -17,9 +17,10 @@
     "http-server": "^0.10.0"
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-preset-env": "^1.6.1",
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "babel-loader": "^8.1.0",
+    "core-js": "3",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"
   }
