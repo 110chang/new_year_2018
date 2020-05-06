@@ -1,7 +1,7 @@
 
 import FileSaver from 'file-saver';
-import './tracking-min';
-import './face-min';
+import '../../node_modules/tracking/build/tracking-min';
+import '../../node_modules/tracking/build/data/face-min';
 
 !function() {
 
