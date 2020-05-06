@@ -66,7 +66,7 @@ import '../../node_modules/tracking/build/data/face-min';
     navigator.mediaDevices.enumerateDevices().then(devices => {
       // console.log(devices);
       cameras = devices.filter(device => device.kind === 'videoinput');
-      // console.log(cameras);
+      console.log(cameras);
       updateInterface();
     });
 
